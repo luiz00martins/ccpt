@@ -1,8 +1,6 @@
---[[ 
-	ComputerCraft Package Tool Installer
-	Authors: PentagonLP, SkyTheCodeMaster
-	Version: 1.1
-]]
+---ComputerCraft Package Tool Installer
+---@author PentagonLP, SkyTheCodeMaster
+---@version 1.1
 
 -- Read arguments
 local args = {...}
@@ -10,21 +8,20 @@ local args = {...}
 args[2] = args[2] or "main"
 
 -- FILE MANIPULATION FUNCTIONS --
---[[ Stores a file in a desired location
-	@param String filepath: Filepath where to create file (if file already exists, it gets overwritten)
-	@param String content: Content to store in file
---]]
+
+--- Stores a file in a desired location
+---@param filepath string: Filepath where to create file (if file already exists, it gets overwritten)
+---@param content string: Content to store in file
 local function storeFile(filepath,content)
 	local writefile = fs.open(filepath,"w")
 	writefile.write(content)
 	writefile.close()
 end
 
---[[ Reads a file from a desired location
-	@param String filepath: Filepath to the file to read
-	@param String createnew: (Optional) Content to store in new file and return if file does not exist. Can be nil.
-	@return String|boolean content|error: Content of the file; If createnew is nil and file doesn't exist boolean false is returned
---]]
+--- Reads a file from a desired location
+---@param filepath string: Filepath to the file to read
+---@param createnew? string: (Optional) Content to store in new file and return if file does not exist. Can be nil.
+---@return string|false content|error: Content of the file; If createnew is nil and file doesn't exist boolean false is returned
 local function readFile(filepath,createnew)
 	local readfile = fs.open(filepath,"r")
 	if not readfile then
@@ -37,35 +34,40 @@ local function readFile(filepath,createnew)
 	end
 	local content = readfile.readAll()
 	readfile.close()
+	if content==nil then
+		return false
+	end
 	return content
 end
 
---[[ Stores a table in a file
-	@param String filepath: Filepath where to create file (if file already exists, it gets overwritten)
-	@param Table data: Table to store in file
---]]
+--- Stores a table in a file
+---@param filepath string: Filepath where to create file (if file already exists, it gets overwritten)
+---@param data table: Table to store in file
 local function storeData(filepath,data)
 	storeFile(filepath,textutils.serialize(data):gsub("\n",""))
 end
 
---[[ Reads a table from a file in a desired location
-	@param String filepath: Filepath to the file to read
-	@param boolean createnew: If true, an empty table is stored in new file and returned if file does not exist.
-	@return Table|boolean content|error: Table thats stored in the file; If createnew is false and file doesn't exist boolean false is returned
---]]
+--- Reads a table from a file in a desired location
+---@param filepath string: Filepath to the file to read
+---@param createnew? boolean: If true, an empty table is stored in new file and returned if file does not exist.
+---@return table|boolean content|error: Table thats stored in the file; If createnew is false and file doesn't exist boolean false is returned
 local function readData(filepath,createnew)
+	local content
 	if createnew then
-		return textutils.unserialize(readFile(filepath,textutils.serialize({}):gsub("\n","")))
+		content = readFile(filepath,textutils.serialize({}):gsub("\n",""))
 	else
-		return textutils.unserialize(readFile(filepath,nil))
+		content = readFile(filepath,nil)
 	end
+	if content==false then
+		return false
+	end
+	return textutils.unserialize(content)
 end
 
 -- HTTP FETCH FUNCTIONS --
---[[ Gets result of HTTP URL
-	@param String url: The desired URL
-	@return Table|boolean result|error: The result of the request; If the URL is not reachable, an error is printed in the terminal and boolean false is returned
---]]
+--- Gets result of HTTP URL
+---@param url string: The desired URL
+---@return table|boolean result|error: The result of the request; If the URL is not reachable, an error is printed in the terminal and boolean false is returned
 local function gethttpresult(url)
 	if not http.checkURL(url) then
 		print("ERROR: Url '" .. url .. "' is blocked in config. Unable to fetch data.")
@@ -79,11 +81,10 @@ local function gethttpresult(url)
 	return result
 end
 
---[[ Download file HTTP URL
-	@param String filepath: Filepath where to create file (if file already exists, it gets overwritten)
-	@param String url: The desired URL
-	@return boolean error: If the URL is not reachable, an error is printed in the terminal and boolean false is returned; If everything goes well, true is returned
---]]
+--- Downloads a file from a desired URL
+---@param filepath string: Filepath where to create file (if file already exists, it gets overwritten)
+---@param url string: The desired URL
+---@return boolean error: If the URL is not reachable, an error is printed in the terminal and boolean false is returned; If everything goes well, true is returned
 local function downloadfile(filepath,url)
 	local result = gethttpresult(url)
 	if not result then 
@@ -94,11 +95,11 @@ local function downloadfile(filepath,url)
 end
 
 -- MISC HELPER FUNCTIONS --
---[[ Checks wether a String starts with another one
-	@param String haystack: String to check wether is starts with another one
-	@param String needle: String to check wether another one starts with it
-	@return boolean result: Wether the firest String starts with the second one
-]]--
+
+--- Checks wether a String starts with another one
+---@param haystack string: String to check wether is starts with another one
+---@param needle string: String to check wether another one starts with it
+---@return boolean result: Wether the firest String starts with the second one
 local function startsWith(haystack,needle)
 	return string.sub(haystack,1,string.len(needle))==needle
 end
@@ -158,13 +159,17 @@ elseif args[1]=="remove" then
 	print("[Installer] Uninstalling 'ccpt'...")
 	fs.delete("/.ccpt")
 	shell.setCompletionFunction("ccpt", nil)
-	shell.setPath(string.gsub(shell.path(),regexEscape(":.ccpt/program","")))
+	shell.setPath(string.gsub(shell.path(),regexEscape(":.ccpt/program")))
 	if fs.exists("startup") then
 		print("[Installer] Removing 'ccpt' from startup...")
 		local startup = readFile("startup","")
-		startup = string.gsub(startup,regexEscape("-- ccpt: Search for updates"), "")
-		startup = string.gsub(startup,regexEscape("shell.run(\".ccpt/program/ccpt\",\"startup\")"), "")
-		storeFile("startup",startup)
+		if startup == false then
+			print("[Installer] No 'ccpt' found in startup!")
+		else
+			startup = string.gsub(startup,regexEscape("-- ccpt: Search for updates"), "")
+			startup = string.gsub(startup,regexEscape("shell.run(\".ccpt/program/ccpt\",\"startup\")"), "")
+			storeFile("startup",startup)
+		end
 	end
 	print("[Installer] So long, and thanks for all the fish!")
 else

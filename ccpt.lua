@@ -1,8 +1,6 @@
---[[ 
-	ComputerCraft Package Tool
-	Author: PentagonLP
-	Version: 1.1
-]]
+--- ComputerCraft Package Tool
+--- @author PentagonLP
+--- @version 1.1
 
 -- Load properprint library
 local properprint = require("/lib/properprint")
@@ -27,10 +25,9 @@ local actions
 local installtypes
 local autocomplete
 
---[[ Prints only if a given boolean is 'false'
-	@param String text: Text to print
-	@param boolean booleantocheck: Boolean wether not to print
-]]--
+---Prints only if a given boolean is 'false'
+---@param text string: Text to print
+---@param booleantocheck boolean: Boolean wether not to print
 local function bprint(text, booleantocheck)
 	if not booleantocheck then
 		properprint.pprint(text)
@@ -38,18 +35,17 @@ local function bprint(text, booleantocheck)
 end
 
 -- PACKAGE FUNCTIONS --
---[[ Checks wether a package is installed
-	@param String packageid: The ID of the package
-	@return boolean installed: Is the package installed?
-]]--
+
+---Checks wether a package is installed
+---@param packageid string: The ID of the package
+---@return boolean: Is the package installed?
 local function isinstalled(packageid)
 	return not (fileutils.readData("/.ccpt/installedpackages",true)[packageid] == nil)
 end
 
---[[ Checks wether a package is installed
-	@param String packageid: The ID of the package
-	@return Table|boolean packagedata|error: Read the data of the package from '/.ccpt/packagedata'; If package is not found return false
-]]--
+---Checks wether a package is installed
+---@param packageid string: The ID of the package
+---@return table|false: Read the data of the package from '/.ccpt/packagedata'; If package is not found return false
 local function getpackagedata(packageid)
 	-- Read package data
 	local allpackagedata = fileutils.readData("/.ccpt/packagedata",false)
@@ -75,11 +71,10 @@ local function getpackagedata(packageid)
 	return packagedata
 end
 
---[[ Converts an array to a String; array entrys are split with spaces
-	@param Table array: The array to convert
-	@param boolean|nil iterator|nil: If true, not the content but the address of the content within the array is converted to a string
-	@return String convertedstring: The String biult from the array
-]]--
+---Converts an array to a String; array entrys are split with spaces
+---@param array table: The array to convert
+---@param iterator? boolean: If true, not the content but the address of the content within the array is converted to a string
+---@return string: The String biult from the array
 local function arraytostring(array,iterator)
 	iterator = iterator or false
 	local result = ""
@@ -99,11 +94,10 @@ local function regexEscape(str)
 	return str:gsub("[%(%)%.%%%+%-%*%?%[%^%$%]]", "%%%1")
 end
 
---[[ Searches all packages for updates
-	@param Table|nil installedpackages|nil: installedpackages to prevent fetching them again; If nil they are fetched again
-	@param boolean|nil reducedprint|nil: If reducedprint is true, only if updates are availible only the result is printed in console, but nothing else. If nil, false is taken as default.
-	@result Table packageswithupdates: Table with packages with updates is returned
-]]--
+---Searches all packages for updates
+---@param installedpackages? table: installedpackages to prevent fetching them again; If nil they are fetched again
+---@param reducedprint? boolean: If reducedprint is true, only if updates are availible only the result is printed in console, but nothing else. If nil, false is taken as default.
+---@return table: Table with packages with updates is returned
 local function checkforupdates(installedpackages,reducedprint)
 	-- If parameters are nil, load defaults
 	reducedprint = reducedprint or false
@@ -132,18 +126,17 @@ local function checkforupdates(installedpackages,reducedprint)
 end
 
 -- MISC HELPER FUNCTIONS --
---[[ Checks wether a String starts with another one
-	@param String haystack: String to check wether is starts with another one
-	@param String needle: String to check wether another one starts with it
-	@return boolean result: Wether the firest String starts with the second one
-]]--
+
+---Checks wether a String starts with another one
+---@param haystack string: String to check wether is starts with another one
+---@param needle string: String to check wether another one starts with it
+---@return boolean: Wether the firest String starts with the second one
 local function startsWith(haystack,needle)
 	return string.sub(haystack,1,string.len(needle))==needle
 end
 
---[[ Presents a choice in console to wich the user can anser with 'y' ('yes') or 'n' ('no'). Captialisation doesn't matter.
-	@return boolean choice: The users choice
-]]--
+---Presents a choice in console to wich the user can anser with 'y' ('yes') or 'n' ('no'). Captialisation doesn't matter.
+---@return boolean: The users choice
 local function ynchoice()
 	while true do
 		local input = io.read()
@@ -158,10 +151,9 @@ local function ynchoice()
 end
 
 -- COMMAND FUNCTIONS --
--- Update
---[[ Get packageinfo from the internet and search from updates
-	@param boolean startup: Run with startup=true on computer startup; if startup=true it doesn't print as much to the console
-]]--
+
+---Get packageinfo from the internet and search from updates
+---@param startup? boolean: Run with startup=true on computer startup; if startup=true it doesn't print as much to the console
 local function update(startup)
 	startup = startup or false
 	-- Fetch default Packages
@@ -212,17 +204,20 @@ end
 local installpackage
 local upgradepackage
 
---[[ Recursive function to install Packages and dependencies
-]]--
+---Recursive function to install Packages and dependencies
+---@param packageid string: The ID of the package
+---@param packageinfo? table: The packageinfo of the package; If nil it is fetched from the internet
+---@return boolean: Whether the installation was successful
 installpackage = function(packageid,packageinfo)
 	properprint.pprint("Installing '" .. packageid .. "'...")
 	-- Get Packageinfo
 	if (packageinfo==nil) then
 		print("Reading packageinfo of '" .. packageid .. "'...")
-		packageinfo = getpackagedata(packageid)
-		if packageinfo==false then
+		local data = getpackagedata(packageid)
+		if data==false then
 			return false
 		end
+		packageinfo = data
 	end
 	
 	-- Install dependencies
@@ -252,18 +247,22 @@ installpackage = function(packageid,packageinfo)
 	fileutils.storeData("/.ccpt/installedpackages",installedpackages)
 	print("'" .. packageid .. "' successfully installed!")
 	installed = installed+1
+	return true
 end
 
---[[ Recursive function to update Packages and dependencies
-]]--
+---Recursive function to update Packages and dependencies
+---@param packageid string: The ID of the package
+---@param packageinfo? table: The packageinfo of the package; If nil it is fetched from the internet
+---@return boolean: Whether the update was successful
 upgradepackage = function(packageid,packageinfo)
 	-- Get Packageinfo
 	if (packageinfo==nil) then
 		print("Reading packageinfo of '" .. packageid .. "'...")
-		packageinfo = getpackagedata(packageid)
-		if packageinfo==false then
+		local data = getpackagedata(packageid)
+		if data==false then
 			return false
 		end
+		packageinfo = data
 	end
 	
 	local installedpackages = fileutils.readData("/.ccpt/installedpackages",true)
@@ -301,11 +300,10 @@ upgradepackage = function(packageid,packageinfo)
 	fileutils.storeData("/.ccpt/installedpackages",installedpackages)
 	print("'" .. packageid .. "' successfully updated!")
 	updated = updated+1
+	return true
 end
 
--- Install
---[[ Install a Package 
-]]--
+---Install a Package 
 local function install()
 	if args[2] == nil then
 		properprint.pprint("Incomplete command, missing: 'Package ID'; Syntax: 'ccpt install <PackageID>'")
@@ -327,15 +325,20 @@ local function install()
 	print("Install of '" .. args[2] .. "' complete!")
 end
 
---[[ Different install methodes
-]]--
+-- Different install methodes
+
+---@param installdata table: The installdata of the package
+---@return boolean: Whether the installation was successful
 local function installlibrary(installdata)
 	local result = httputils.downloadfile("lib/" .. installdata["filename"],installdata["url"])
 	if result==false then
 		return false
 	end
+	return true
 end
 
+---@param installdata table: The installdata of the package
+---@return boolean: Whether the installation was successful
 local function installscript(installdata)
 	local result = httputils.downloadfile("/.ccpt/tempinstaller",installdata["scripturl"])
 	if result==false then
@@ -343,12 +346,12 @@ local function installscript(installdata)
 	end
 	shell.run("/.ccpt/tempinstaller","install")
 	fs.delete("/.ccpt/tempinstaller")
+	return true
 end
 
--- Upgrade
--- Upgrade installed Packages
--- TODO: Single package updates
+---Upgrade installed Packages
 local function upgrade()
+	--TODO: Single package updates
 	local packageswithupdates = checkforupdates(fileutils.readData("/.ccpt/installedpackages",true),false)
 	if packageswithupdates==false then
 		return
@@ -365,8 +368,9 @@ local function upgrade()
 	end
 end
 
---[[ Different install methodes require different update methodes
-]]--
+---Different install methodes require different update methodes
+---@param installdata table: The installdata of the package
+---@return boolean: Whether the update was successful
 local function updatescript(installdata)
 	local result = httputils.downloadfile("/.ccpt/tempinstaller",installdata["scripturl"])
 	if result==false then
@@ -374,25 +378,34 @@ local function updatescript(installdata)
 	end
 	shell.run("/.ccpt/tempinstaller","update")
 	fs.delete("/.ccpt/tempinstaller")
+	return true
 end
 
---[[ Recursive function to find all Packages that are dependend on the one we want to remove to also remove them
-]]--
+---Recursive function to find all Packages that are dependend on the one we want to remove to also remove them
+---@param packageid string: The ID of the package
+---@param packageinfo table|nil: The packageinfo of the package; If nil it is fetched from the internet
+---@param installedpackages table: The installedpackages table
+---@param packagestoremove table: The packagestoremove table
+---@return table|false: The packagestoremove table or false if an error occured
 local function getpackagestoremove(packageid,packageinfo,installedpackages,packagestoremove)
 	packagestoremove[packageid] = true
 	-- Get Packageinfo
 	if (packageinfo==nil) then
 		print("Reading packageinfo of '" .. packageid .. "'...")
-		packageinfo = getpackagedata(packageid)
-		if packageinfo==false then
+		local data = getpackagedata(packageid)
+		if data==false then
 			return false
 		end
+		packageinfo = data
 	end
 	
 	-- Check packages that are dependend on that said package
 	for k,v in pairs(installedpackages) do
 		if not (getpackagedata(k)["dependencies"][packageid]==nil) then
 			local packagestoremovenew = getpackagestoremove(k,nil,installedpackages,packagestoremove)
+			if packagestoremovenew==false then
+				return false
+			end
 			for l,w in pairs(packagestoremovenew) do
 				packagestoremove[l] = true
 			end
@@ -402,8 +415,7 @@ local function getpackagestoremove(packageid,packageinfo,installedpackages,packa
 	return packagestoremove
 end
 
--- Uninstall
--- Remove installed Packages
+---Remove installed Packages
 local function uninstall()
 	-- Check input
 	if args[2] == nil then
@@ -421,6 +433,9 @@ local function uninstall()
 	
 	-- Check witch package(s) to remove (A package dependend on a package that's about to get removed is also removed)
 	local packagestoremove = getpackagestoremove(args[2],packageinfo,fileutils.readData("/.ccpt/installedpackages",true),{})
+	if packagestoremove==false then
+		return
+	end
 	local packagestoremovestring = ""
 	for k,v in pairs(packagestoremove) do
 		if not (k==args[2]) then
@@ -475,12 +490,15 @@ local function uninstall()
 	end
 end
 
---[[ Different install methodes require different uninstall methodes
-]]--
+-- Different install methodes require different uninstall methodes
+
+---@param installdata table: The installdata of the package
 local function removelibrary(installdata)
 	fs.delete("lib/" .. installdata["filename"])
 end
 
+---@param installdata table: The installdata of the package
+---@return boolean: Whether the uninstallation was successful
 local function removescript(installdata)
 	local result = httputils.downloadfile("/.ccpt/tempinstaller",installdata["scripturl"])
 	if result==false then
@@ -488,11 +506,10 @@ local function removescript(installdata)
 	end
 	shell.run("/.ccpt/tempinstaller","remove")
 	fs.delete("/.ccpt/tempinstaller")
+	return true
 end
 
--- Add
---[[ Add custom package URL to local list
-]]--
+---Add custom package URL to local list
 local function add()
 	-- Check input
 	if args[2] == nil then
@@ -529,9 +546,7 @@ local function add()
 	end
 end
 
--- Remove
---[[  Remove Package URL from local list
-]]--
+---Remove Package URL from local list
 local function remove()
 	-- Check input
 	if args[2] == nil then
@@ -560,9 +575,7 @@ local function remove()
 	end
 end
 
--- Info
---[[ Info about a package
-]]--
+---Info about a package
 local function info()
 	-- Check input
 	if args[2] == nil then
@@ -588,9 +601,7 @@ local function info()
 	end
 end
 
--- List
---[[ List all Packages 
-]]--
+---List all Packages
 local function list()
 	-- Read data
 	print("Reading all packages data...")
@@ -619,17 +630,13 @@ local function list()
 	end
 end
 
--- Startup
---[[ Run on Startup
-]]--
+---Run on Startup
 local function startup()
 	-- Update silently on startup
 	update(true)
 end
 
--- Help
---[[ Print help
-]]--
+---Print help
 local function help()
 	print("Syntax: ccpt")
 	for i,v in pairs(actions) do
@@ -641,9 +648,7 @@ local function help()
 	print("This package tool has Super Creeper Powers.")
 end
 
--- Version
---[[ Print Version
-]]--
+---Print Version
 local function version()
 	-- Count lines
 	local linecount = 0
@@ -658,16 +663,15 @@ local function version()
 end
 
 -- Idk randomly appeared one day
---[[ Fuse
-]]--
+
+---Fuse
 local function zzzzzz()
 	properprint.pprint("The 'ohnosecond':")
 	properprint.pprint("The 'ohnosecond' is the fraction of time between making a mistake and realizing it.")
 	properprint.pprint("(Oh, and please fix the hole you've created)")
 end
 
---[[ Explode
-]]--
+---Explode
 local function boom()
 	print("|--------------|")
 	print("| |-|      |-| |")
@@ -680,11 +684,11 @@ local function boom()
 end
 
 -- TAB AUTOCOMLETE HELPER FUNCTIONS --
---[[ Add Text to result array if it fits
-	@param String option: Autocomplete option to check
-	@param String texttocomplete: The already typed in text to.. complete...
-	@param Table result: Array to add the option to if it passes the check
-]]--
+
+---Add Text to result array if it fits
+---@param option string: Autocomplete option to check
+---@param texttocomplete string: The already typed in text to.. complete...
+---@param result table: Array to add the option to if it passes the check
 local function addtoresultifitfits(option,texttocomplete,result)
 	if startsWith(option,texttocomplete) then
 		result[#result+1] = string.sub(option,#texttocomplete+1)
@@ -693,7 +697,10 @@ local function addtoresultifitfits(option,texttocomplete,result)
 end
 
 -- Functions to complete different subcommands of a command
--- Complete action (eg. "update" or "list")
+
+---Complete action (eg. "update" or "list")
+---@param curText string: The already typed in text to.. complete...
+---@return table: The result array
 local function completeaction(curText)
 	local result = {}
 	for i,v in pairs(actions) do
@@ -704,8 +711,11 @@ local function completeaction(curText)
 	return result
 end
 
--- Complete packageid (filter can be nil to display all, "installed" to only recommend installed packages or "not installed" to only recommend not installed packages)
 local autocompletepackagecache = {}
+---Complete packageid (filter can be nil to display all, "installed" to only recommend installed packages or "not installed" to only recommend not installed packages)
+---@param curText? string: The already typed in text to.. complete...
+---@param filterstate? string: The filterstate to apply; can be nil to display all, "installed" to only recommend installed packages or "not installed" to only recommend not installed packages
+---@return table: The result array
 local function completepackageid(curText,filterstate)
 	local result = {}
 	if curText=="" or curText==nil then
@@ -714,6 +724,7 @@ local function completepackageid(curText,filterstate)
 			return {}
 		end
 		autocompletepackagecache = packagedata
+		curText = ""
 	end
 	local installedversion
 	if not (filterstate==nil) then
@@ -735,7 +746,9 @@ local function completepackageid(curText,filterstate)
 	return result
 end
 
--- Complete packageid, but only for custom packages, which is much simpler
+---Complete packageid, but only for custom packages, which is much simpler
+---@param curText string: The already typed in text to.. complete...
+---@return table: The result array
 local function completecustompackageid(curText)
 	local result = {}
 	local custompackages = fileutils.readData("/.ccpt/custompackages",true)
@@ -745,13 +758,12 @@ local function completecustompackageid(curText)
 	return result
 end
 
---[[ Recursive function to go through the 'autocomplete' array and complete commands accordingly
-	@param Table lookup: Part of the 'autocomplete' array to look autocomplete up in
-	@param String lastText: Numeric array of parameters before the current one
-	@param String curText: The already typed in text to.. complete...
-	@param int iterator: Last position in the lookup array
-	@return Table completeoptions: Availible complete options
-]]--
+---Recursive function to go through the 'autocomplete' array and complete commands accordingly
+---@param lookup table: Part of the 'autocomplete' array to look autocomplete up in
+---@param lastText table: Numeric array of parameters before the current one
+---@param curText string: The already typed in text to.. complete...
+---@param iterator integer: Last position in the lookup array
+---@return table: Availible complete options
 local function tabcompletehelper(lookup,lastText,curText,iterator)
 	if lookup[lastText[iterator]]==nil then
 		return {}
@@ -766,8 +778,7 @@ local function tabcompletehelper(lookup,lastText,curText,iterator)
 end
 
 -- CONFIG ARRAYS --
---[[ Array to store subcommands, help comment and function
-]]--
+---Array to store subcommands, help comment and function
 actions = {
 	update = {
 		func = update,
@@ -820,8 +831,7 @@ actions = {
 	}
 } 
 
---[[ Array to store different installation methodes and corresponding functions
-]]--
+---Array to store different installation methodes and corresponding functions
 installtypes = {
 	library = {
 		install = installlibrary,
@@ -837,8 +847,7 @@ installtypes = {
 	}
 }
 
---[[ Array to store autocomplete information
-]]--
+---Array to store autocomplete information
 autocomplete = {
 	func = completeaction,
 	funcargs = {},
@@ -863,6 +872,13 @@ autocomplete = {
 }
 
 -- MAIN AUTOCOMLETE FUNCTION --
+
+--- Main autocomplete function
+---@param shell shell: The shell object
+---@param parNumber integer: The number of parameters before the current one
+---@param curText string: The already typed in text to.. complete...
+---@param lastText table: Numeric array of parameters before the current one
+---@return table: The result array
 local function tabcomplete(shell, parNumber, curText, lastText)
 	local result = {}
 	tabcompletehelper(

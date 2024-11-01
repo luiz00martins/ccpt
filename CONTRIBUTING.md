@@ -36,11 +36,9 @@ ccpt
 ## Code structure
 - Every codefile must have the following comment ad the first few lines:
 ```lua
---[[ 
-	<Title/file function>
-	Author: <Original author>
-	Version: <Corresponding ccpt version or file version if the file is not directly related to a ccpt version (eg. installer)>
-]]
+---<Title/file function>
+---@author <Original author>
+---@version <Corresponding ccpt version or file version if the file is not directly related to a ccpt version (eg. installer)>
 ```
 - All functions must be members of a group, containing one or more functions. These functions must be below each other. Every Group has a comment with tha gruop name/function at the beginning:
 ```lua
@@ -48,14 +46,13 @@ ccpt
 ```
 - Every function definition must begin with the following comment:
 ```lua
---[[ <Description of what the function does>
-	@param <parameter type> <name>: <description what it is for/what it does>
-	(1 line per parameter)
-	...
-	@return <variable type> <name>: <description of what is returned>
-	(1 line per returned variable)
-	...
---]]
+---<Description of what the function does>
+---@param <parameter type> <name>: <description what it is for/what it does>
+---(1 line per parameter)
+---...
+---@return <variable type> <name>: <description of what is returned>
+---(1 line per returned variable)
+---...
 ```
 - All functions that don't just do one thing (eg. reading a file or writing something in console) but follow different steps, one after the other (like first fetch a file, then store it somewhere) to achive a result, must have these different steps commented.
 ## Dealing with issues
