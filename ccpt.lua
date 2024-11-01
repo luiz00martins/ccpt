@@ -769,7 +769,7 @@ local function tabcompletehelper(lookup,lastText,curText,iterator)
 		return {}
 	end
 	if #lastText==iterator then
-		return lookup[lastText[iterator]]["func"](curText,unpack(lookup[lastText[iterator]]["funcargs"]))
+		return lookup[lastText[iterator]]["func"](curText,table.unpack(lookup[lastText[iterator]]["funcargs"]))
 	elseif lookup[lastText[iterator]]["next"]==nil then
 		return {}
 	else
