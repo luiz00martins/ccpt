@@ -102,9 +102,9 @@ local function checkforupdates(installedpackages,reducedprint)
 	-- If parameters are nil, load defaults
 	reducedprint = reducedprint or false
 	installedpackages = installedpackages or fileutils.readData("/.ccpt/installedpackages",true)
-	
+
 	bprint("Checking for updates...",reducedprint)
-	
+
 	-- Check for updates
 	local packageswithupdates = {}
 	for k,v in pairs(installedpackages) do
@@ -112,7 +112,7 @@ local function checkforupdates(installedpackages,reducedprint)
 			packageswithupdates[#packageswithupdates+1] = k
 		end
 	end
-	
+
 	-- Print result
 	if #packageswithupdates==0 then
 		bprint("All installed packages are up to date!",reducedprint)
@@ -121,7 +121,7 @@ local function checkforupdates(installedpackages,reducedprint)
 	else
 		print("There are " .. #packageswithupdates .." packages with a newer version available: " .. arraytostring(packageswithupdates))
 	end
-	
+
 	return packageswithupdates
 end
 
@@ -169,7 +169,7 @@ local function update(startup)
 	for k,v in pairs(custompackages) do
 		packages[k] = v
 	end
-	
+
 	-- Fetch package data from the diffrent websites
 	local packagedata = {}
 	for k,v in pairs(packages) do
@@ -196,7 +196,7 @@ local function update(startup)
 	end
 	fileutils.storeData("/.ccpt/installedpackages",installedpackagesnew)
 	bprint("Data update complete!",startup)
-	
+
 	-- Check for updates
 	checkforupdates(installedpackagesnew,startup)
 end
@@ -219,7 +219,7 @@ installpackage = function(packageid,packageinfo)
 		end
 		packageinfo = data
 	end
-	
+
 	-- Install dependencies
 	properprint.pprint("Installing dependencies of '" .. packageid .. "', if there are any...")
 	for k,v in pairs(packageinfo["dependencies"]) do
@@ -234,7 +234,7 @@ installpackage = function(packageid,packageinfo)
 			end
 		end
 	end
-	
+
 	-- Install package
 	print("Installing '" .. packageid .. "'...")
 	local installdata = packageinfo["install"]
@@ -264,7 +264,7 @@ upgradepackage = function(packageid,packageinfo)
 		end
 		packageinfo = data
 	end
-	
+
 	local installedpackages = fileutils.readData("/.ccpt/installedpackages",true)
 	if installedpackages[packageid]==packageinfo["newestversion"] then
 		properprint.pprint("'" .. packageid .. "' already updated! Skipping... (This is NOT an error)")
@@ -272,7 +272,7 @@ upgradepackage = function(packageid,packageinfo)
 	else
 		properprint.pprint("Updating '" .. packageid .. "' (" .. installedpackages[packageid] .. "->" .. packageinfo["newestversion"] .. ")...")
 	end
-	
+
 	-- Install/Update dependencies
 	properprint.pprint("Updating or installing new dependencies of '" .. packageid .. "', if there are any...")
 	for k,v in pairs(packageinfo["dependencies"]) do
@@ -287,7 +287,7 @@ upgradepackage = function(packageid,packageinfo)
 			end
 		end
 	end
-	
+
 	-- Install package
 	print("Updating '" .. packageid .. "'...")
 	local installdata = packageinfo["install"]
@@ -398,7 +398,7 @@ local function getpackagestoremove(packageid,packageinfo,installedpackages,packa
 		end
 		packageinfo = data
 	end
-	
+
 	-- Check packages that are dependent on that said package
 	for k,v in pairs(installedpackages) do
 		if not (getpackagedata(k)["dependencies"][packageid]==nil) then
@@ -411,7 +411,7 @@ local function getpackagestoremove(packageid,packageinfo,installedpackages,packa
 			end
 		end
 	end
-	
+
 	return packagestoremove
 end
 
@@ -430,7 +430,7 @@ local function uninstall()
 		properprint.pprint("Package '" .. args[2] .. "' is not installed.")
 		return
 	end
-	
+
 	-- Check witch package(s) to remove (A package dependent on a package that's about to get removed is also removed)
 	local packagestoremove = getpackagestoremove(args[2],packageinfo,fileutils.readData("/.ccpt/installedpackages",true),{})
 	if packagestoremove==false then
@@ -442,7 +442,7 @@ local function uninstall()
 			local packagestoremovestring = packagestoremovestring .. k .. " "
 		end
 	end
-	
+
 	-- Are you really really REALLY sure to remove these packages?
 	if not (#packagestoremovestring==0) then
 		properprint.pprint("There are installed packages that depend on the package you want to uninstall: " .. packagestoremovestring)
@@ -457,7 +457,7 @@ local function uninstall()
 			return
 		end
 	end
-	
+
 	-- If ccpt would be removed in the process, tell the user that that's a dump idea. But I mean, who am I to stop him, I guess...
 	for k,v in pairs(packagestoremove) do
 		if k=="ccpt" then
@@ -466,14 +466,14 @@ local function uninstall()
 			else
 				properprint.pprint("You are about to uninstall the package tool itself, because it depends one or more package that is removed. You won't be able to install or uninstall stuff using the tool afterwards (obviously). Are you sure you want to continue? [y/n]:")
 			end
-			
+
 			if ynchoice() == false then
 				return
 			end
 			break
 		end
 	end
-	
+
 	-- Uninstall package(s)
 	for k,v in pairs(packagestoremove) do
 		print("Uninstalling '" .. k .. "'...")
