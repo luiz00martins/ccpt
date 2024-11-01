@@ -5,11 +5,11 @@
 ]]
 
 -- Load properprint library
-os.loadAPI("lib/properprint")
+local properprint = require("/lib/properprint")
 -- Load fileutils library
-os.loadAPI("lib/fileutils")
+local fileutils = require("/lib/fileutils")
 -- Load httputils library
-os.loadAPI("lib/httputils")
+local httputils = require("/lib/httputils")
 
 -- Read arguments
 args = {...}
