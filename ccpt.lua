@@ -27,7 +27,7 @@ local autocomplete
 
 ---Prints only if a given boolean is 'false'
 ---@param text string: Text to print
----@param booleantocheck boolean: Boolean wether not to print
+---@param booleantocheck boolean: Boolean whether not to print
 local function bprint(text, booleantocheck)
 	if not booleantocheck then
 		properprint.pprint(text)
@@ -36,14 +36,14 @@ end
 
 -- PACKAGE FUNCTIONS --
 
----Checks wether a package is installed
+---Checks whether a package is installed
 ---@param packageid string: The ID of the package
 ---@return boolean: Is the package installed?
 local function isinstalled(packageid)
 	return not (fileutils.readData("/.ccpt/installedpackages",true)[packageid] == nil)
 end
 
----Checks wether a package is installed
+---Checks whether a package is installed
 ---@param packageid string: The ID of the package
 ---@return table|false: Read the data of the package from '/.ccpt/packagedata'; If package is not found return false
 local function getpackagedata(packageid)
@@ -51,13 +51,13 @@ local function getpackagedata(packageid)
 	local allpackagedata = fileutils.readData("/.ccpt/packagedata",false)
 	-- Is the package data built yet?
 	if allpackagedata==false then
-		properprint.pprint("Package Date is not yet built. Please execute 'ccpt update' first. If this message still apears, thats a bug, please report.")
+		properprint.pprint("Package Date is not yet built. Please execute 'ccpt update' first. If this message still appears, thats a bug, please report.")
 		return false
 	end
 	local packagedata = allpackagedata[packageid]
 	-- Does the package exist?
 	if packagedata==nil then
-		properprint.pprint("No data about package '" .. packageid .. "' availible. If you've spelled everything correctly, try executing 'ccpt update'")
+		properprint.pprint("No data about package '" .. packageid .. "' available. If you've spelled everything correctly, try executing 'ccpt update'")
 		return false
 	end
 	-- Is the package installed?
@@ -96,7 +96,7 @@ end
 
 ---Searches all packages for updates
 ---@param installedpackages? table: installedpackages to prevent fetching them again; If nil they are fetched again
----@param reducedprint? boolean: If reducedprint is true, only if updates are availible only the result is printed in console, but nothing else. If nil, false is taken as default.
+---@param reducedprint? boolean: If reducedprint is true, only if updates are available only the result is printed in console, but nothing else. If nil, false is taken as default.
 ---@return table: Table with packages with updates is returned
 local function checkforupdates(installedpackages,reducedprint)
 	-- If parameters are nil, load defaults
@@ -117,9 +117,9 @@ local function checkforupdates(installedpackages,reducedprint)
 	if #packageswithupdates==0 then
 		bprint("All installed packages are up to date!",reducedprint)
 	elseif #packageswithupdates==1 then
-		print("There is 1 package with a newer version availible: " .. arraytostring(packageswithupdates))
+		print("There is 1 package with a newer version available: " .. arraytostring(packageswithupdates))
 	else
-		print("There are " .. #packageswithupdates .." packages with a newer version availible: " .. arraytostring(packageswithupdates))
+		print("There are " .. #packageswithupdates .." packages with a newer version available: " .. arraytostring(packageswithupdates))
 	end
 	
 	return packageswithupdates
@@ -127,10 +127,10 @@ end
 
 -- MISC HELPER FUNCTIONS --
 
----Checks wether a String starts with another one
----@param haystack string: String to check wether is starts with another one
----@param needle string: String to check wether another one starts with it
----@return boolean: Wether the firest String starts with the second one
+---Checks whether a String starts with another one
+---@param haystack string: String to check whether is starts with another one
+---@param needle string: String to check whether another one starts with it
+---@return boolean: Whether the first String starts with the second one
 local function startsWith(haystack,needle)
 	return string.sub(haystack,1,string.len(needle))==needle
 end
@@ -381,7 +381,7 @@ local function updatescript(installdata)
 	return true
 end
 
----Recursive function to find all Packages that are dependend on the one we want to remove to also remove them
+---Recursive function to find all Packages that are dependent on the one we want to remove to also remove them
 ---@param packageid string: The ID of the package
 ---@param packageinfo table|nil: The packageinfo of the package; If nil it is fetched from the internet
 ---@param installedpackages table: The installedpackages table
@@ -399,7 +399,7 @@ local function getpackagestoremove(packageid,packageinfo,installedpackages,packa
 		packageinfo = data
 	end
 	
-	-- Check packages that are dependend on that said package
+	-- Check packages that are dependent on that said package
 	for k,v in pairs(installedpackages) do
 		if not (getpackagedata(k)["dependencies"][packageid]==nil) then
 			local packagestoremovenew = getpackagestoremove(k,nil,installedpackages,packagestoremove)
@@ -431,7 +431,7 @@ local function uninstall()
 		return
 	end
 	
-	-- Check witch package(s) to remove (A package dependend on a package that's about to get removed is also removed)
+	-- Check witch package(s) to remove (A package dependent on a package that's about to get removed is also removed)
 	local packagestoremove = getpackagestoremove(args[2],packageinfo,fileutils.readData("/.ccpt/installedpackages",true),{})
 	if packagestoremove==false then
 		return
@@ -458,13 +458,13 @@ local function uninstall()
 		end
 	end
 	
-	-- If cctp would be removed in the process, tell the user that that's a dump idea. But I mean, who am I to stop him, I guess...
+	-- If ccpt would be removed in the process, tell the user that that's a dump idea. But I mean, who am I to stop him, I guess...
 	for k,v in pairs(packagestoremove) do
 		if k=="ccpt" then
 			if args[2] == "ccpt" then
-				properprint.pprint("You are about to uninstall the package tool itself. You won't be able to install or uninstall stuff using the tool afterwords (obviously). Are you sure you want to continue? [y/n]:")
+				properprint.pprint("You are about to uninstall the package tool itself. You won't be able to install or uninstall stuff using the tool afterwards (obviously). Are you sure you want to continue? [y/n]:")
 			else
-				properprint.pprint("You are about to uninstall the package tool itself, because it depends one or more package that is removed. You won't be able to install or uninstall stuff using the tool afterwords (obviously). Are you sure you want to continue? [y/n]:")
+				properprint.pprint("You are about to uninstall the package tool itself, because it depends one or more package that is removed. You won't be able to install or uninstall stuff using the tool afterwards (obviously). Are you sure you want to continue? [y/n]:")
 			end
 			
 			if ynchoice() == false then
@@ -526,7 +526,7 @@ local function add()
 		return
 	end
 	if not fileutils.file_exists("/.ccpt/packagedata") then
-		properprint.pprint("Package Date is not yet built. Please execute 'ccpt update' first. If this message still apears, thats a bug, please report.")
+		properprint.pprint("Package Date is not yet built. Please execute 'ccpt update' first. If this message still appears, thats a bug, please report.")
 	end
 	-- Overwrite default packages?
 	if not (fileutils.readData("/.ccpt/packagedata",true)[args[2]]==nil) then
@@ -540,7 +540,7 @@ local function add()
 	fileutils.storeData("/.ccpt/custompackages",custompackages)
 	properprint.pprint("Custom package successfully added!")
 	-- Update packagedata?
-	properprint.pprint("Do you want to update the package data ('cctp update')? Your custom package won't be able to be installed until updating. [y/n]:")
+	properprint.pprint("Do you want to update the package data ('ccpt update')? Your custom package won't be able to be installed until updating. [y/n]:")
 	if ynchoice() then
 		update()
 	end
@@ -569,7 +569,7 @@ local function remove()
 	fileutils.storeData("/.ccpt/custompackages",custompackages)
 	properprint.pprint("Custom package successfully removed!")
 	-- Update packagedata?
-	properprint.pprint("Do you want to update the package data ('cctp update')? Your custom package will still be able to be installed/updated/uninstalled until updating. [y/n]:")
+	properprint.pprint("Do you want to update the package data ('ccpt update')? Your custom package will still be able to be installed/updated/uninstalled until updating. [y/n]:")
 	if ynchoice() then
 		update()
 	end
@@ -606,7 +606,7 @@ local function list()
 	-- Read data
 	print("Reading all packages data...")
 	if not fileutils.file_exists("/.ccpt/packagedata") then
-		properprint.pprint("No Packages found. Please run 'cctp update' first.'")
+		properprint.pprint("No Packages found. Please run 'ccpt update' first.'")
 		return
 	end
 	local packagedata = fileutils.readData("/.ccpt/packagedata",true)
@@ -687,7 +687,7 @@ end
 
 ---Add Text to result array if it fits
 ---@param option string: Autocomplete option to check
----@param texttocomplete string: The already typed in text to.. complete...
+---@param texttocomplete string: The already typed in text to complete
 ---@param result table: Array to add the option to if it passes the check
 local function addtoresultifitfits(option,texttocomplete,result)
 	if startsWith(option,texttocomplete) then
@@ -699,7 +699,7 @@ end
 -- Functions to complete different subcommands of a command
 
 ---Complete action (eg. "update" or "list")
----@param curText string: The already typed in text to.. complete...
+---@param curText string: The already typed in text to complete
 ---@return table: The result array
 local function completeaction(curText)
 	local result = {}
@@ -713,7 +713,7 @@ end
 
 local autocompletepackagecache = {}
 ---Complete packageid (filter can be nil to display all, "installed" to only recommend installed packages or "not installed" to only recommend not installed packages)
----@param curText? string: The already typed in text to.. complete...
+---@param curText? string: The already typed in text to complete
 ---@param filterstate? string: The filterstate to apply; can be nil to display all, "installed" to only recommend installed packages or "not installed" to only recommend not installed packages
 ---@return table: The result array
 local function completepackageid(curText,filterstate)
@@ -747,7 +747,7 @@ local function completepackageid(curText,filterstate)
 end
 
 ---Complete packageid, but only for custom packages, which is much simpler
----@param curText string: The already typed in text to.. complete...
+---@param curText string: The already typed in text to complete
 ---@return table: The result array
 local function completecustompackageid(curText)
 	local result = {}
@@ -761,9 +761,9 @@ end
 ---Recursive function to go through the 'autocomplete' array and complete commands accordingly
 ---@param lookup table: Part of the 'autocomplete' array to look autocomplete up in
 ---@param lastText table: Numeric array of parameters before the current one
----@param curText string: The already typed in text to.. complete...
+---@param curText string: The already typed in text to complete
 ---@param iterator integer: Last position in the lookup array
----@return table: Availible complete options
+---@return table: Available complete options
 local function tabcompletehelper(lookup,lastText,curText,iterator)
 	if lookup[lastText[iterator]]==nil then
 		return {}
@@ -843,7 +843,7 @@ installtypes = {
 		install = installscript,
 		update = updatescript,
 		remove = removescript,
-		desc = "Programm installed via Installer"
+		desc = "Program installed via Installer"
 	}
 }
 
@@ -876,7 +876,7 @@ autocomplete = {
 --- Main autocomplete function
 ---@param shell shell: The shell object
 ---@param parNumber integer: The number of parameters before the current one
----@param curText string: The already typed in text to.. complete...
+---@param curText string: The already typed in text to complete
 ---@param lastText table: Numeric array of parameters before the current one
 ---@return table: The result array
 local function tabcomplete(shell, parNumber, curText, lastText)

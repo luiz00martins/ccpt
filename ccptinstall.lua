@@ -96,10 +96,10 @@ end
 
 -- MISC HELPER FUNCTIONS --
 
---- Checks wether a String starts with another one
----@param haystack string: String to check wether is starts with another one
----@param needle string: String to check wether another one starts with it
----@return boolean result: Wether the firest String starts with the second one
+--- Checks whether a String starts with another one
+---@param haystack string: String to check whether is starts with another one
+---@param needle string: String to check whether another one starts with it
+---@return boolean result: Whether the first String starts with the second one
 local function startsWith(haystack,needle)
 	return string.sub(haystack,1,string.len(needle))==needle
 end
@@ -127,7 +127,7 @@ local toInstall = {
 	}
 }
 
--- MAIN PROGRAMM --
+-- MAIN PROGRAM --
 if (args[1]=="install") or (args[1]==nil) then
 	print("[Installer] Well, hello there!")
 	print("[Installer] Thank you for downloading the ComputerCraft Package Tool! Installing...")

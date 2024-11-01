@@ -4,8 +4,8 @@
 
 ### About branches
 
-This repository has no releases because of how the way CCPT updates itself. It always downloads its newest version from the main branch. There must be no commits changing CCPT's code directly to the main branch. The part of "packageinfo.ccpt" that is relevant to the installment process ("newestversion", "dependencies" and the "install"-section) must also not be directly commited to the main branch. Commiting to other files like the installer (after extensive testing! You are still affecting files that are needed in the ongoing operation!) is allowed.  
-The next version of "CCPT" has its own branch where developement changes (eg. implementing a new feature or fixing a bug) have to be commited to. Once everything is tested and enough new features and bugfixes are impemented, a new version is released (don't forget to change the readme, social preview, packageinfo, documentation, and, if necessary, installer!) and the "version branch" is merged with the main branch.
+This repository has no releases because of how the way CCPT updates itself. It always downloads its newest version from the main branch. There must be no commits changing CCPT's code directly to the main branch. The part of "packageinfo.ccpt" that is relevant to the installment process ("newestversion", "dependencies" and the "install"-section) must also not be directly committed to the main branch. Committing to other files like the installer (after extensive testing! You are still affecting files that are needed in the ongoing operation!) is allowed.  
+The next version of "CCPT" has its own branch where development changes (eg. implementing a new feature or fixing a bug) have to be committed to. Once everything is tested and enough new features and bugfixes are implemented, a new version is released (don't forget to change the readme, social preview, packageinfo, documentation, and, if necessary, installer!) and the "version branch" is merged with the main branch.
 
 ### About the folder and file structure
 
@@ -29,17 +29,17 @@ ccpt
 |  
 | - img: Images for Github presence  
 |   | - (images used in readme)  
-|   | - social-preview.gif: Social preview picture (Updating this does not automaticly change the social preview picture!)  
+|   | - social-preview.gif: Social preview picture (Updating this does not automatically change the social preview picture!)  
 |   \ - work: Folder to store image presets like backgrounds and unexported gimp files  
 |       \ - (raw image files and gimp files to reuse in new images)  
 |  
 \ - testing: Test data to test CCPT's features  
-    \ - (different packageinfo files and other files only used for testing CCPT's features without habing to use real packages)
+    \ - (different packageinfo files and other files only used for testing CCPT's features without having to use real packages)
 ```
 
 ## Code structure
 
-- Every codefile must have the following comment ad the first few lines:
+- Every codefile must have the following comment at the first few lines:
 
 ```lua
 ---<Title/file function>
@@ -47,7 +47,7 @@ ccpt
 ---@version <Corresponding ccpt version or file version if the file is not directly related to a ccpt version (eg. installer)>
 ```
 
-- All functions must be members of a group, containing one or more functions. These functions must be below each other. Every Group has a comment with tha gruop name/function at the beginning:
+- All functions must be members of a group, containing one or more functions. These functions must be below each other. Every Group has a comment with the group name/function at the beginning:
 
 ```lua
 -- <Description/name> --
@@ -65,7 +65,7 @@ ccpt
 ---...
 ```
 
-- All functions that don't just do one thing (eg. reading a file or writing something in console) but follow different steps, one after the other (like first fetch a file, then store it somewhere) to achive a result, must have these different steps commented.
+- All functions that don't just do one thing (eg. reading a file or writing something in console) but follow different steps, one after the other (like first fetch a file, then store it somewhere) to achieve a result, must have these different steps commented.
 
 ## Dealing with issues
 

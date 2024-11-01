@@ -17,4 +17,4 @@ What did they do?
 Please provide as much evidence as possible: Links, screenshots, everything.
 
 [Please don't change the text below this line]  
-"The community is encouraged to discuss wether the user hurt the community guidlines and the fate of the user. Wow, that suddenly got dramatic..." ~PentagonLP
+"The community is encouraged to discuss whether the user hurt the community guidlines and the fate of the user. Wow, that suddenly got dramatic..." ~PentagonLP

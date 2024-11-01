@@ -20,7 +20,7 @@
 
 ## Features
 
-The package tool is built after the Linux package tool '[apt/apt-get](https://salsa.debian.org/apt-team/apt)'. It has simular features as apt-get, but for ComputerCraft. You can **install a default set of packages** from online sources, or **register your own packages**. It deals with **dependencies** *(eg. Package A is dependend on package B, so if you install package A the tool will also install package B)* and it automaticly **checks for updates**; If updates are availible, you can **install them with one command**. This package tool was created to make all of that **as simple to do as possible**.<br>
+The package tool is built after the Linux package tool '[apt/apt-get](https://salsa.debian.org/apt-team/apt)'. It has similar features as apt-get, but for ComputerCraft. You can **install a default set of packages** from online sources, or **register your own packages**. It deals with **dependencies** *(eg. Package A is dependent on package B, so if you install package A the tool will also install package B)* and it automatically **checks for updates**; If updates are available, you can **install them with one command**. This package tool was created to make all of that **as simple to do as possible**.<br>
 
 At the moment, the list of default packages is very small. **If you are a developer and you want to register your own program, please read the '[How to apply for the default package list for one of your packages](https://github.com/PentagonLP/ccpt/wiki/How-to-apply-for-the-default-package-list-for-one-of-your-packages)' wiki article.**
 
@@ -34,7 +34,7 @@ pastebin run syAUmLaF
 
 **Attention:** The default 'pastebin'-program does no longer work reliably on **1.7.10 or older**! You can fix the issue by downloading and installing [this](https://github.com/SquidDev-CC/FAQBot-CC/raw/786214ba08d8ccc7cbd11eb1d921e82327dee9a8/etc/cc-pastebin-fix.zip) resourcepack, or, if you are playing on a server, ask your admin to install it in the server directory. **You have to restart your game/server for it to work!**  
 
-Alternativly, you can manually download the [ccptinstall.lua](https://github.com/PentagonLP/ccpt/blob/main/ccptinstall.lua)-file, put it in your computers working directory and execute it.
+Alternatively, you can manually download the [ccptinstall.lua](https://github.com/PentagonLP/ccpt/blob/main/ccptinstall.lua)-file, put it in your computers working directory and execute it.
 
 ## How to use
 
@@ -52,7 +52,7 @@ The following actions are possible:
 ccpt update
 ```
 
-This fetches the list of default packages and properties of all packages, local packages included, from the internet and stores them localy.  
+This fetches the list of default packages and properties of all packages, local packages included, from the internet and stores them locally.  
 
 *The Output should look something like this:*
 
@@ -67,7 +67,7 @@ This fetches the list of default packages and properties of all packages, local 
 ccpt install <packageid>
 ```
 
-This installes the package with the id `<packageid>`, including all the packages it depends on.  
+This installs the package with the id `<packageid>`, including all the packages it depends on.  
 
 *The Output should look something like this:*
 
@@ -96,7 +96,7 @@ This updates all packages. If a package needs a new dependency after an update o
 ccpt uninstall <packageid>
 ```
 
-This uninstalles the package with the given ID and all packages that depend on said package.  
+This uninstalls the package with the given ID and all packages that depend on said package.  
 
 *The Output should look something like this:*
 <br><img
@@ -138,7 +138,7 @@ This removes a custom package from the local list. You have to run 'ccpt update'
 ccpt list
 ```
 
-This lists name, their install status and wether they have availible updates of all installed and able to install packages.  
+This lists name, their install status and whether they have available updates of all installed and able to install packages.  
 
 *The Output should look something like this:*
 <br><img
@@ -166,7 +166,7 @@ This prints name, author, description, website (if given), installation type, in
 ccpt help
 ```
 
-This prints all availible actions for the 'ccpt' command.  
+This prints all available actions for the 'ccpt' command.  
 
 *The Output should look something like this:*
 <br><img
@@ -199,8 +199,8 @@ Take a look in our Wiki: [How to create your own package](https://github.com/Pen
 
 ## Last words
 
-Well, that's about it! Thanks for using this package tool. It would be awsome if we could build a useful collection of packages over time.  
-As always, please keep in mind that my first language is not english. There are defnitly some spelling/language-related mistakes in this repository. If you find one, please create an issue so I can fix them.  
-Also, I'm still very new to Github. If you find anything I can do better, and there definitly is as I don't know all the features of Github yet, please do also create an issue.  
+Well, that's about it! Thanks for using this package tool. It would be awesome if we could build a useful collection of packages over time.  
+As always, please keep in mind that my first language is not english. There are definitely some spelling/language-related mistakes in this repository. If you find one, please create an issue so I can fix them.  
+Also, I'm still very new to Github. If you find anything I can do better, and there definitely is as I don't know all the features of Github yet, please do also create an issue.  
 Anyways, thanks for reading all this!  
 ~PentagonLP

@@ -20,7 +20,7 @@ What error message did you get? Please include full error message to make the bu
 A clear and concise description of what you expected to happen.
 
 **CraftOS and Game version**
-Which version of CraftOS version do you use? Which Minecraft Version are you plaing on?
+Which version of CraftOS version do you use? Which Minecraft Version are you playing on?
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
