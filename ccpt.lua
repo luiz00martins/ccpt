@@ -899,12 +899,20 @@ end
 -- Register autocomplete function
 shell.setCompletionFunction(".ccpt/program/ccpt", tabcomplete)
 
--- Add to startup file to run at startup
-local startup = fileutils.readFile("startup","") or ""
-if string.find(startup,"shell.run(\".ccpt/program/ccpt\",\"startup\")",1,true)==nil then
-	startup = "-- ccpt: Seach for updates\nshell.run(\".ccpt/program/ccpt\",\"startup\")\n\n" .. startup
-	fileutils.storeFile("startup",startup)
-	print("[Installer] Startup entry created!")
+-- Add to startup file/folder to run at startup
+local startupcontent = "-- ccpt: Search for updates\nshell.run(\".ccpt/program/ccpt\",\"startup\")"
+if fs.isDir("startup") then
+	if not fs.exists("startup/ccpt.lua") then
+		fileutils.storeFile("startup/ccpt.lua", startupcontent)
+		print("[Installer] Startup entry created in startup folder!")
+	end
+else
+	local startup = fileutils.readFile("startup","") or ""
+	if string.find(startup,"shell.run(\".ccpt/program/ccpt\",\"startup\")",1,true)==nil then
+		startup = startupcontent .. "\n\n" .. startup
+		fileutils.storeFile("startup",startup)
+		print("[Installer] Startup entry created!")
+	end
 end
 
 -- Call required function

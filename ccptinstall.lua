@@ -160,7 +160,13 @@ elseif args[1]=="remove" then
 	fs.delete("/.ccpt")
 	shell.setCompletionFunction("ccpt", nil)
 	shell.setPath(string.gsub(shell.path(),regexEscape(":.ccpt/program")))
-	if fs.exists("startup") then
+
+	if fs.isDir("startup") then
+		print("[Installer] Removing 'ccpt' from startup folder...")
+		if fs.exists("startup/ccpt.lua") then
+			fs.delete("startup/ccpt.lua")
+		end
+	else
 		print("[Installer] Removing 'ccpt' from startup...")
 		local startup = readFile("startup","")
 		if startup == false then
