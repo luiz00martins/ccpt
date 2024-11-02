@@ -110,19 +110,19 @@ end
 
 local toInstall = {
 	pprint = {
-		url = "https://raw.githubusercontent.com/PentagonLP/properprint/main/properprint",
+		url = "https://raw.githubusercontent.com/luiz00martins/properprint/main/properprint.lua",
 		path = "lib/properprint"
 	},
 	fileutils = {
-		url = "https://raw.githubusercontent.com/PentagonLP/fileutils/main/fileutils",
+		url = "https://raw.githubusercontent.com/luiz00martins/fileutils/main/fileutils.lua",
 		path = "lib/fileutils"
 	},
 	httputils = {
-		url = "https://raw.githubusercontent.com/PentagonLP/httputils/main/httputils.lua",
+		url = "https://raw.githubusercontent.com/luiz00martins/httputils/main/httputils.lua",
 		path = "lib/httputils"
 	},
 	ccpt = {
-		url = "https://raw.githubusercontent.com/PentagonLP/ccpt/" .. args[2] .. "/ccpt.lua",
+		url = "https://raw.githubusercontent.com/luiz00martins/ccpt/" .. args[2] .. "/ccpt.lua",
 		path = ".ccpt/program/ccpt"
 	}
 }

@@ -32,6 +32,12 @@ The installer is hosted on [pastebin.com](https://pastebin.com). Therefore, you 
 pastebin run syAUmLaF
 ```
 
+You can also install using wget:
+
+```bash
+wget run https://raw.githubusercontent.com/luiz00martins/ccpt/refs/heads/DevVersion-1.1/ccptinstall.lua install DevVersion-1.1
+```
+
 **Attention:** The default 'pastebin'-program does no longer work reliably on **1.7.10 or older**! You can fix the issue by downloading and installing [this](https://github.com/SquidDev-CC/FAQBot-CC/raw/786214ba08d8ccc7cbd11eb1d921e82327dee9a8/etc/cc-pastebin-fix.zip) resourcepack, or, if you are playing on a server, ask your admin to install it in the server directory. **You have to restart your game/server for it to work!**  
 
 Alternatively, you can manually download the [ccptinstall.lua](https://github.com/PentagonLP/ccpt/blob/main/ccptinstall.lua)-file, put it in your computers working directory and execute it.

@@ -13,7 +13,7 @@ local httputils = require("/lib/httputils")
 local args = {...}
 
 -- Link to a list of packages that are present by default (used in 'update()')
-local defaultpackageurl = "https://raw.githubusercontent.com/PentagonLP/ccpt/main/defaultpackages.ccpt"
+local defaultpackageurl = "https://raw.githubusercontent.com/luiz00martins/ccpt/DevVersion-1.1/defaultpackages.ccpt"
 
 -- Counters to print out at the very end
 local installed = 0
