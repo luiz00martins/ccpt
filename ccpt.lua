@@ -525,7 +525,7 @@ local function add()
 		properprint.pprint("A custom package with the id '" .. args[2] .. "' already exists! Please choose a different one.")
 		return
 	end
-	if not fileutils.file_exists("/.ccpt/packagedata") then
+	if not fs.exists("/.ccpt/packagedata") then
 		properprint.pprint("Package Date is not yet built. Please execute 'ccpt update' first. If this message still appears, thats a bug, please report.")
 	end
 	-- Overwrite default packages?
@@ -605,7 +605,7 @@ end
 local function list()
 	-- Read data
 	print("Reading all packages data...")
-	if not fileutils.file_exists("/.ccpt/packagedata") then
+	if not fs.exists("/.ccpt/packagedata") then
 		properprint.pprint("No Packages found. Please run 'ccpt update' first.'")
 		return
 	end
